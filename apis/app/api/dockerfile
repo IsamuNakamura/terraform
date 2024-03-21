@@ -1,0 +1,10 @@
+FROM golang:1.22.0-alpine
+
+WORKDIR /app
+COPY ./ ./api
+
+WORKDIR /app/api
+RUN go mod download
+
+RUN go build ./cmd/main.go
+CMD ["./main"]

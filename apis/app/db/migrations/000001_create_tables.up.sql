@@ -1,0 +1,10 @@
+-- ユーザーマスタ
+CREATE TABLE t_users (
+    id VARCHAR(20) BINARY NOT NULL,
+    name VARCHAR(255) BINARY NOT NULL UNIQUE,
+    password VARCHAR(255) BINARY NOT NULL,
+    email VARCHAR(255) BINARY,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);
