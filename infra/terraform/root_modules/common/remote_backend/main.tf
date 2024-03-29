@@ -2,7 +2,7 @@ module "label" {
   source = "../../../modules/cloudposse_null_label"
 
   # namespace, nameは、プロジェクトによって変更する
-  environment = "prd"
+  environment = "common"
   namespace   = "terraform-test"
   name        = ""
   delimiter   = "-"
