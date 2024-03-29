@@ -3,7 +3,7 @@ module "label" {
 
   # namespace, nameは、プロジェクトによって変更する
   environment = "prd"
-  namespace   = "terraform"
+  namespace   = "terraform-test"
   name        = ""
   delimiter   = "-"
   label_order = ["environment", "namespace", "name"]

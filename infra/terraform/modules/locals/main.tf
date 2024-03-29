@@ -1,6 +1,6 @@
 # 共通のローカル変数は、プロジェクトによって変更する
 locals {
-  domain_name             = "terraform_test.jp"
+  domain_name             = "terraform-test.jp"
   frontend_subdomain_name = "app"
   backend_subdomain_name  = "api"
 
