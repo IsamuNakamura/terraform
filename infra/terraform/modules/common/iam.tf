@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "assume_role" {
+data "aws_iam_policy_document" "vpc_flow_logs_assume_role" {
   statement {
     sid = "AssumeRoleForVPCFlowLogs"
 
@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "assume_role" {
 resource "aws_iam_role" "vpc_flow_logs" {
   name               = "${var.label}-${var.tier}-vpc-flow-logs"
   description        = "VPC Flow Logs Role"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_role.json
 
   tags = merge(
     var.tags,
@@ -28,7 +28,7 @@ resource "aws_iam_role" "vpc_flow_logs" {
   )
 }
 
-resource "aws_iam_role_policy" "assume_role_policy" {
+resource "aws_iam_role_policy" "vpc_flow_logs_role_policy" {
   name   = aws_iam_role.vpc_flow_logs.name
   role   = aws_iam_role.vpc_flow_logs.id
   policy = data.aws_iam_policy_document.vpc_flow_logs.json
