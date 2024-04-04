@@ -1,0 +1,2 @@
+CREATE Database IF NOT EXISTS database_production DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- CREATE Database IF NOT EXISTS app2 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
