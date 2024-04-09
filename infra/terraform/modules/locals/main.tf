@@ -4,6 +4,7 @@ locals {
   frontend_subdomain_name = "app"
   backend_subdomain_name  = "api"
 
+  api_version                   = "v1"
   health_check_path             = "health_check"
   frontend_port                 = 3000
   backend_port                  = 80
