@@ -53,3 +53,6 @@ terraform.rc
 
 # Ignore Vercel data
 .vercel*
+
+# Ignore Sentry DSN
+.sentry_dsn
