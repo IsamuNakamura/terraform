@@ -56,3 +56,6 @@ terraform.rc
 
 # Ignore Sentry DSN
 .sentry_dsn
+
+# Ignore Github Personal Token for CodeBuild
+.github_token

@@ -1,0 +1,46 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - yarn add sequelize sequelize-cli mysql2
+      - npx sequelize-cli --version
+  pre_build:
+    commands:
+    - bash -c "
+        CLUSTER_STATUS=\$(aws rds describe-db-clusters --db-cluster-identifier ${DB_CLUSTER_IDENTIFIER} --query \"DBClusters[0].Status\" --output text);
+        echo CLUSTER_STATUS = \$CLUSTER_STATUS;
+
+        if [[ \"\$CLUSTER_STATUS\" == \"stopped\" ]]; then
+            echo \"Starting the cluster...\";
+            aws rds start-db-cluster --db-cluster-identifier ${DB_CLUSTER_IDENTIFIER};
+        elif [[ \"\$CLUSTER_STATUS\" == \"stopping\" ]]; then
+            while [[ \"\$CLUSTER_STATUS\" == \"stopping\" ]]; do
+                echo \"Cluster is in the process of stopping...\";
+                sleep 60;
+                CLUSTER_STATUS=\$(aws rds describe-db-clusters --db-cluster-identifier ${DB_CLUSTER_IDENTIFIER} --query \"DBClusters[0].Status\" --output text);
+                if [[ \"\$CLUSTER_STATUS\" == \"stopped\" ]]; then
+                    echo \"Starting the cluster...\";
+                    aws rds start-db-cluster --db-cluster-identifier ${DB_CLUSTER_IDENTIFIER};
+                fi
+            done;
+        elif [[ \"\$CLUSTER_STATUS\" == \"starting\" ]]; then
+            echo \"Cluster is already in the process of starting...\";
+        fi
+
+        while [[ \"\$CLUSTER_STATUS\" != \"available\" ]]; do
+            sleep 60;
+            CLUSTER_STATUS=\$(aws rds describe-db-clusters --db-cluster-identifier ${DB_CLUSTER_IDENTIFIER} --query \"DBClusters[0].Status\" --output text);
+            echo \"Waiting for cluster to become available...\";
+        done;"
+      - cd ${MIGRATION_DIRECTORY}
+      - npx sequelize-cli db:migrate:status --url "mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}"
+  build:
+    commands:
+      - npx sequelize-cli db:migrate:undo --url "mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}"
+      # - npx sequelize-cli db:migrate:undo:all --url "mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}"
+  post_build:
+    commands:
+      - npx sequelize-cli db:migrate:status --url "mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}"
