@@ -1,0 +1,306 @@
+{
+  "start": "-PT6H",
+  "periodOverride": "inherit",
+  "widgets": [
+    {
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 24,
+      "height": 2,
+      "properties": {
+        "markdown": "# ALB\n\nアクセス数"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 8,
+      "width": 24,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "RequestCount",
+            "LoadBalancer",
+            "${alb_arn_backend}",
+            "AvailabilityZone",
+            "ap-northeast-1a",
+            {
+              "region": "ap-northeast-1"
+            }
+          ],
+          [
+            "...",
+            "ap-northeast-1c",
+            {
+              "region": "ap-northeast-1"
+            }
+          ],
+          [
+            "...",
+            "ap-northeast-1d",
+            {
+              "region": "ap-northeast-1"
+            }
+          ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "${region}",
+        "title": "Backend アクセス数",
+        "start": "-PT168H",
+        "end": "P0D",
+        "stat": "Sum",
+        "period": 60
+      }
+    },
+    {
+      "type": "text",
+      "x": 0,
+      "y": 14,
+      "width": 24,
+      "height": 2,
+      "properties": {
+        "markdown": "# ECS Services\n\nCPU, Memory"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 16,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ECS",
+            "CPUUtilization",
+            "ServiceName",
+            "${ecs_service_name_app}",
+            "ClusterName",
+            "${ecs_cluster_name}"
+          ]
+        ],
+        "period": 300,
+        "stat": "Maximum",
+        "region": "${region}",
+        "title": "ECS CPU",
+        "liveData": false,
+        "legend": {
+          "position": "bottom"
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "WARN",
+              "value": 50
+            },
+            {
+              "label": "ERROR",
+              "value": 70
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 16,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ECS",
+            "MemoryUtilization",
+            "ServiceName",
+            "${ecs_service_name_app}",
+            "ClusterName",
+            "${ecs_cluster_name}"
+          ]
+        ],
+        "period": 300,
+        "stat": "Maximum",
+        "region": "${region}",
+        "title": "ECS Memory",
+        "liveData": false,
+        "legend": {
+          "position": "bottom"
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "WARN",
+              "value": 50
+            },
+            {
+              "label": "ERROR",
+              "value": 70
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 0,
+      "y": 22,
+      "width": 24,
+      "height": 2,
+      "properties": {
+        "markdown": "# RDS \n\nCPU, Connections"
+      }
+    },
+    {
+      "x": 0,
+      "y": 24,
+      "width": 24,
+      "height": 6,
+      "type": "metric",
+      "properties": {
+        "view": "timeSeries",
+        "stacked": false,
+        "metrics": [
+          [
+            "AWS/RDS",
+            "DatabaseConnections",
+            "DBClusterIdentifier",
+            "${rds_cluster_identifier}"
+          ]
+        ],
+        "region": "${region}",
+        "period": 60,
+        "stat": "Sum"
+      }
+    },
+    {
+      "x": 0,
+      "y": 30,
+      "width": 12,
+      "height": 6,
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          [
+            "AWS/RDS",
+            "CPUUtilization",
+            "Role",
+            "WRITER",
+            "DBClusterIdentifier",
+            "${rds_cluster_identifier}",
+            {
+              "region": "${region}"
+            }
+          ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "${region}",
+        "title": "RDS CPUUtilization",
+        "period": 300,
+        "stat": "Maximum"
+      }
+    },
+    {
+      "x": 12,
+      "y": 30,
+      "width": 12,
+      "height": 6,
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          [
+            "AWS/RDS",
+            "FreeableMemory",
+            "DBClusterIdentifier",
+            "${rds_cluster_identifier}",
+            {
+              "region": "${region}"
+            }
+          ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "${region}",
+        "title": "RDS FreeableMemory",
+        "period": 300,
+        "stat": "Maximum"
+      }
+    },
+    {
+      "x": 0,
+      "y": 36,
+      "width": 12,
+      "height": 6,
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          [
+            "AWS/RDS",
+            "ServerlessDatabaseCapacity",
+            "DBClusterIdentifier",
+            "${rds_cluster_identifier}"
+          ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "${region}",
+        "title": "Serverless Database Capacity",
+        "period": 300,
+        "stat": "Maximum"
+      }
+    },
+    {
+      "x": 12,
+      "y": 36,
+      "width": 12,
+      "height": 6,
+      "type": "metric",
+      "properties": {
+        "view": "timeSeries",
+        "stacked": false,
+        "metrics": [
+          [
+            "AWS/RDS",
+            "ACUUtilization",
+            "DBClusterIdentifier",
+            "${rds_cluster_identifier}"
+          ]
+        ],
+        "region": "${region}",
+        "period": 60,
+        "stat": "Sum"
+      }
+    },
+    {
+      "type": "text",
+      "x": 0,
+      "y": 42,
+      "width": 24,
+      "height": 2,
+      "properties": {
+        "markdown": "# WAF\n\n各ルールのブロックカウント"
+      }
+    },
+    {
+      "type": "log",
+      "x": 0,
+      "y": 44,
+      "width": 24,
+      "height": 6,
+      "properties": {
+        "query": "SOURCE '${log_group_arn_waf_acl}' | fields @timestamp, action, terminatingRuleId\n| filter action = \"BLOCK\"\n| stats  count(*) as rule by terminatingRuleId, bin(60m)\n",
+        "region": "us-east-1",
+        "stacked": false,
+        "view": "bar"
+      },
+      "legend": {
+        "position": "bottom",
+        "name": "rule"
+      }
+    }
+  ]
+}

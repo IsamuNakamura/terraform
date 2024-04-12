@@ -1,0 +1,25 @@
+################################################################################
+# AWS Config
+################################################################################
+data "aws_iam_policy_document" "chatbot_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["chatbot.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "chatbot_config" {
+  name               = "${var.label}-chatbot-config"
+  assume_role_policy = data.aws_iam_policy_document.chatbot_assume_role.json
+
+  tags = merge(
+    var.tags,
+    {
+      Tier = var.tier,
+    }
+  )
+}
